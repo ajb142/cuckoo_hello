@@ -5,7 +5,7 @@ This is a simple hello world project to demonstrate
  - Screen canbe controlled
 
 # Build instruction
-## build
+## Build
 run the following:
 ```
 mkdir build && cd build
