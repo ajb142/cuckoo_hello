@@ -14,7 +14,7 @@ cmake --build .
 cd ..
 ```
 
-## upload
+## Upload
 SSH to the Nest and start a simple server to receive the file:
 ```
 nc -l -p 51234 > ./hello
@@ -29,6 +29,7 @@ Back on the nest, alter permissions:
 ```
 chmod +x ./hello
 ```
+## Run
 Stop the nest client so we can control hardware:
 ```
 /etc/init.d/nestlabs stop
