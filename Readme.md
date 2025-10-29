@@ -31,10 +31,6 @@ Now you can run with
 ```
 ./hello
 ```
-# Issues building
-The toolchain was compiled for 32 bit systems. If you are trying to compile on 64bit systems, the following guide may help:
-https://devnodes.in/blog/linux/arm-no-such-a-file-or-directory/
-
 
 # Future work
 I may turn this into a demonstrator for the various IO the nest has.
