@@ -26,6 +26,10 @@ Back on the nest, alter permissions:
 ```
 chmod +x ./hello
 ```
+Stop the nest client so we can control hardware:
+```
+/etc/init.d/nestlabs stop
+```
 
 Now you can run with
 ```
