@@ -1,5 +1,8 @@
 # Cuckoo Hello
-This is a simple hello world project to demonstrate that cross compiling works and this can be ran on a Nest Thermostat
+This is a simple hello world project to demonstrate 
+ - Cross compiling works and this can be ran on a Nest Thermostat
+ - Input devices cann be read
+ - Screen canbe controlled
 
 # Build instruction
 ## build
@@ -35,6 +38,3 @@ Now you can run with
 ```
 ./hello
 ```
-
-# Future work
-I may turn this into a demonstrator for the various IO the nest has.
