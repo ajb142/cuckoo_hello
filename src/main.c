@@ -22,6 +22,7 @@ enum screen_color
 // Function declarations
 void print_event_data(const char *event_name, const struct input_event *event_data);
 void poll_input_events(int event1, int event2);
+void play_beep();
 void set_screen_color(int screen_buffer, enum screen_color color);
 
 int main() {
@@ -94,6 +95,13 @@ void poll_input_events(int event1, int event2)
    if (bytesRead2 > 0)
    {
       print_event_data("event2", &event2_data);
+
+      if(event2_data.type == EV_KEY 
+         && event2_data.code == 't' 
+         && event2_data.value == 1)
+      {
+         play_beep(5);
+      }
    }
 }
 
@@ -105,6 +113,31 @@ void print_event_data(const char* event_name, const struct input_event* event_da
           event_data->type,
           event_data->code,
           event_data->value);
+}
+
+void play_beep(int duraton_ms)
+{
+   int event0 = open("/dev/input/event0", O_WRONLY | O_NONBLOCK);
+   if (event0 >= 0)
+   {
+      struct input_event beep_start;
+      memset(&beep_start, 0, sizeof(beep_start));
+      beep_start.type = EV_SND;
+      beep_start.code = SND_BELL;
+      beep_start.value = 1000;
+      write(event0, &beep_start, sizeof(beep_start));
+
+      usleep(duraton_ms * 1000); // Beep duration 200 ms
+
+      struct input_event beep_stop;
+      memset(&beep_stop, 0, sizeof(beep_stop));
+      beep_stop.type = EV_SND;
+      beep_stop.code = SND_BELL;
+      beep_stop.value = 0;
+      write(event0, &beep_stop, sizeof(beep_stop));
+
+      close(event0);
+   }
 }
 
 void set_screen_color(int screen_buffer, enum screen_color color) {
