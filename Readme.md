@@ -1,8 +1,11 @@
 # Cuckoo Hello
-This is a simple hello world project to demonstrate that cross compiling works and this can be ran on a Nest Thermostat
+This is a simple hello world project to demonstrate 
+ - Cross compiling works and this can be ran on a Nest Thermostat
+ - Input devices cann be read
+ - Screen canbe controlled
 
 # Build instruction
-## build
+## Build
 run the following:
 ```
 mkdir build && cd build
@@ -11,7 +14,7 @@ cmake --build .
 cd ..
 ```
 
-## upload
+## Upload
 SSH to the Nest and start a simple server to receive the file:
 ```
 nc -l -p 51234 > ./hello
@@ -26,15 +29,13 @@ Back on the nest, alter permissions:
 ```
 chmod +x ./hello
 ```
+## Run
+Stop the nest client so we can control hardware:
+```
+/etc/init.d/nestlabs stop
+```
 
 Now you can run with
 ```
 ./hello
 ```
-# Issues building
-The toolchain was compiled for 32 bit systems. If you are trying to compile on 64bit systems, the following guide may help:
-https://devnodes.in/blog/linux/arm-no-such-a-file-or-directory/
-
-
-# Future work
-I may turn this into a demonstrator for the various IO the nest has.
