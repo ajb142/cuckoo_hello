@@ -19,10 +19,22 @@ enum screen_color
    SCREEN_COLOR_BLUE  = 0x0000FF
 };
 
+static enum screen_color colors[] = {
+    SCREEN_COLOR_RED,
+    SCREEN_COLOR_GREEN,
+    SCREEN_COLOR_BLUE,
+    SCREEN_COLOR_WHITE,
+    SCREEN_COLOR_BLACK};
+static int color_count = sizeof(colors) / sizeof(colors[0]);
+static int current_color_index = 0;
+
+static int screen_buffer;
+
 // Function declarations
 void print_event_data(const char *event_name, const struct input_event *event_data);
 void poll_input_events(int event1, int event2);
 void play_beep();
+void change_screen_color(int screen_buffer);
 void set_screen_color(int screen_buffer, enum screen_color color);
 
 int main() {
@@ -37,40 +49,16 @@ int main() {
       return 1;
    }
 
-   int screen_buffer = open("/dev/fb0", O_RDWR);
+   screen_buffer = open("/dev/fb0", O_RDWR);
    if (screen_buffer < 0)
    {
       perror("Failed to open screen buffer");
       return 1;
    }
-
-   // Array of colors to cycle through
-   enum screen_color colors[] = {
-      SCREEN_COLOR_RED,
-      SCREEN_COLOR_GREEN,
-      SCREEN_COLOR_BLUE,
-      SCREEN_COLOR_WHITE,
-      SCREEN_COLOR_BLACK
-   };
-   int color_count = sizeof(colors) / sizeof(colors[0]);
-   int current_color_index = 0;
-   
-   time_t last_color_change = time(NULL);
    
    while (1) 
    {
       poll_input_events(event1, event2);
-      
-      // Check if 1 second has passed
-      time_t current_time = time(NULL);
-      if (current_time - last_color_change >= 1) {
-         set_screen_color(screen_buffer, colors[current_color_index]);
-         printf("Changed screen to color: 0x%06X\n", colors[current_color_index]);
-         
-         current_color_index = (current_color_index + 1) % color_count;
-         last_color_change = current_time;
-      }
-      
       usleep(10 * 1000); // Sleep for 10 milliseconds
    }
 
@@ -100,7 +88,8 @@ void poll_input_events(int event1, int event2)
          && event2_data.code == 't' 
          && event2_data.value == 1)
       {
-         play_beep(5);
+         play_beep(10);
+         change_screen_color(screen_buffer);
       }
    }
 }
@@ -138,6 +127,14 @@ void play_beep(int duraton_ms)
 
       close(event0);
    }
+}
+
+void change_screen_color(int screen_buffer) {
+
+   set_screen_color(screen_buffer, colors[current_color_index]);
+
+   // Move to the next color
+   current_color_index = (current_color_index + 1) % color_count;
 }
 
 void set_screen_color(int screen_buffer, enum screen_color color) {
